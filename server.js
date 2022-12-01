@@ -45,11 +45,12 @@ start();
 const io = require('socket.io')(server, {
 	// pingTimeout: 60000, helps saves bandwidth by going off when not in use
 	cors: {
-		origin: 'http://localhost:3000',
+		origin: process.env.ORIGIN,
 		// credentials: true,
 	},
 });
 let activeUsers = [];
+
 // socket start
 io.on('connection', (socket) => {
 	// new user added
@@ -86,6 +87,6 @@ io.on('connection', (socket) => {
 		activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
 		console.log('User Disconnected', activeUsers);
 		// socket.leave(userData._id);
-		io.emit('connected', activeUsers);
+		socket.emit('connected', activeUsers);
 	});
 });
